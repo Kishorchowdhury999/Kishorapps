@@ -1,0 +1,440 @@
+<!DOCTYPE html><html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kishor Apps — Colorful Showcase + Admin</title>
+  <meta name="description" content="A colorful, professional, and unique app showcase website with a simple client-side admin panel (demo)." />
+  <style>
+    :root{
+      --bgA:#0f1226;        /* deep night */
+      --bgB:#14193d;        /* indigo */
+      --card:#1c2153;       /* card base */
+      --muted:#9aa3b2;      /* text muted */
+      --text:#eef2ff;       /* text main */
+      --brand:#7c3aed;      /* purple */
+      --brand2:#06b6d4;     /* cyan */
+      --ok:#10b981;         /* green */
+      --warn:#f59e0b;       /* amber */
+      --err:#ef4444;        /* red */
+      --shadow: 0 20px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;font-family:ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+    body{
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,.20), transparent 60%),
+        radial-gradient(800px 500px at 95% 0%, rgba(6,182,212,.20), transparent 60%),
+        linear-gradient(180deg,var(--bgA),var(--bgB));
+      min-height:100vh;
+      display:flex;flex-direction:column
+    }
+    .wrap{width:min(1200px,94%);margin:0 auto;padding:24px 0 48px}
+    header{
+      position:sticky;top:0;z-index:40;backdrop-filter:saturate(1.2) blur(8px);
+      background:linear-gradient(180deg, rgba(15,18,38,.9), rgba(20,25,61,.6) 60%, transparent);
+      border-bottom:1px solid rgba(255,255,255,.06)
+    }
+    .nav{
+      display:flex;align-items:center;gap:14px;justify-content:space-between;padding:12px 0
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:var(--shadow);font-weight:800}
+    .logo span{filter:drop-shadow(0 6px 16px rgba(0,0,0,.35))}
+    .title{font-size:20px;font-weight:800;letter-spacing:.2px}
+    .muted{color:var(--muted)}
+    .actions{display:flex;gap:8px}
+    .btn{appearance:none;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);
+      color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer;transition:.2s ease; font-weight:600}
+    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
+    .btn.primary{border-color:transparent;background:linear-gradient(135deg,var(--brand),var(--brand2));}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;padding:18px 0 10px}
+.hero h1{font-size:36px;line-height:1.15;margin:8px 0 12px}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:12px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05)}
+.heroCard{background:linear-gradient(135deg, rgba(124,58,237,.15), rgba(6,182,212,.15));padding:18px;border-radius:var(--radius);box-shadow:var(--shadow)}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}
+.input{flex:1; min-width:260px; display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:10px 12px;border-radius:12px}
+.input input{background:transparent;border:0;outline:0;color:var(--text);width:100%}
+.select, .switch{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:10px 12px;border-radius:12px}
+select{background:transparent;border:0;outline:0;color:var(--text)}
+
+.grid{display:grid;grid-template-columns:repeat( auto-fill, minmax(240px,1fr) );gap:16px}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.thumb{aspect-ratio:16/10;background:linear-gradient(135deg, rgba(124,58,237,.45), rgba(6,182,212,.45));display:grid;place-items:center;font-weight:800;font-size:24px}
+.card .content{padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:11px;padding:6px 9px;border-radius:10px;background:rgba(124,58,237,.18);border:1px solid rgba(124,58,237,.34)}
+.card .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.small{font-size:12px}
+
+.tabs{margin-top:28px;display:flex;gap:10px;border-bottom:1px solid rgba(255,255,255,.14)}
+.tab{padding:10px 12px;border:1px solid rgba(255,255,255,.12);border-bottom:0;border-radius:12px 12px 0 0;background:rgba(255,255,255,.05);cursor:pointer}
+.tab.active{background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0));}
+
+.panel{display:none}
+.panel.active{display:block}
+
+.sectionTitle{margin:20px 0 10px;font-size:18px;font-weight:800}
+
+.form{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.form .field{display:flex;flex-direction:column;gap:8px}
+.form input, .form textarea{padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--text)}
+.form textarea{min-height:110px}
+.form .wide{grid-column:1/-1}
+
+.notice{padding:12px;border-radius:12px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.28)}
+.danger{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.28)}
+
+footer{margin-top:auto;padding:26px 0;border-top:1px solid rgba(255,255,255,.12)}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted)}
+
+.modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.45);z-index:50}
+.modal .box{width:min(560px,92%);background:linear-gradient(180deg, rgba(12,13,30,.95), rgba(22,28,65,.92));border:1px solid rgba(255,255,255,.12);border-radius:16px;box-shadow:var(--shadow);padding:16px}
+.modal.open{display:grid}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="logo"><span>KA</span></div>
+        <div>
+          <div class="title">Kishor Apps</div>
+          <div class="muted small">Colorful • Professional • Unique</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="btnToggleTheme">Theme</button>
+        <button class="btn" id="btnAdmin">Admin</button>
+        <a class="btn primary" href="#gallery">View Gallery</a>
+      </div>
+    </div>
+  </header>  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="pill">🚀 Welcome</div>
+        <h1> Hi welcome My website  <span style="color:#a78bfa">  Kishor </span> 
+ㅤ
+
+          Injoy Apps and Game </h1>
+        <p class="muted">এই সাইটি থেকে Apps ও Game 
+           নামিয়ে খেলা যাবে এখানে আমি 
+            অনেক Apps ও Game upload করব Thanks For everyone</p>
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button class="btn primary" id="btnAddNew">+ নতুন অ্যাপ</button>
+          <button class="btn" id="btnImport">↥ Import JSON</button>
+          <button class="btn" id="btnExport">↧ Export JSON</button>
+        </div>
+      </div>
+      <div class="heroCard">
+        <div class="sectionTitle">⚡ Highlights</div>
+        <ul class="small">
+          <li>Responsive গ্রিড, সার্চ, ক্যাটাগরি ফিল্টার, ট্যাগ</li>
+          <li>অ্যানিমেটেড কালার গ্রেডিয়েন্ট, শ্যাডো কার্ড</li>
+          <li>Client-side Admin (PIN ডেমো)</li>
+          <li>Import/Export for backup</li>
+        </ul>
+      </div>
+    </section><div class="tabs" role="tablist">
+  <button class="tab active" data-tab="gallery">Gallery</button>
+  <button class="tab" data-tab="admin">Admin</button>
+  <button class="tab" data-tab="about">About</button>
+</div>
+
+<section id="gallery" class="panel active" aria-labelledby="Gallery">
+  <div class="toolbar">
+    <label class="input" style="flex:2">
+      🔎<input id="q" placeholder="Search apps by name, tags, description…" />
+    </label>
+    <label class="select">
+      🗂️ ক্যাটাগরি
+      <select id="cat">
+        <option value="all">All</option>
+      </select>
+    </label>
+    <label class="switch">
+      <input type="checkbox" id="sortNew" /> সর্বশেষ আগে
+    </label>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="admin" class="panel" aria-labelledby="Admin">
+  <div class="notice" id="adminNotice">🔒 Admin মুডে ঢুকতে PIN দিন: <code>KIshor</code> (ডেমো)</div>
+  <div style="display:flex;gap:10px;margin:14px 0">
+    <input id="pin" placeholder="Enter PIN" class="btn" style="width:120px;text-align:center" />
+    <button class="btn" id="btnUnlock">Unlock</button>
+    <button class="btn danger" id="btnLock">Lock</button>
+  </div>
+
+  <div id="adminArea" style="display:none">
+    <div class="sectionTitle">➕ Add / Edit App</div>
+    <form id="appForm" class="form">
+      <div class="field">
+        <label>App Name*</label>
+        <input name="name" required />
+      </div>
+      <div class="field">
+        <label>Category*</label>
+        <input name="category" placeholder="Utility / Game / Education" required />
+      </div>
+      <div class="field wide">
+        <label>Short Description</label>
+        <input name="desc" />
+      </div>
+      <div class="field wide">
+        <label>Download / Play Link</label>
+        <input name="link" placeholder="https://…" />
+      </div>
+      <div class="field">
+        <label>Tags (comma)</label>
+        <input name="tags" placeholder="html, css, game" />
+      </div>
+      <div class="field">
+        <label>Thumbnail Text</label>
+        <input name="thumb" placeholder="KA" />
+      </div>
+      <div class="field">
+        <label>Version</label>
+        <input name="version" placeholder="1.0.0" />
+      </div>
+      <div class="field">
+        <label>Release Date</label>
+        <input type="date" name="date" />
+      </div>
+      <div class="field wide">
+        <label>Long Description</label>
+        <textarea name="long"></textarea>
+      </div>
+      <div class="field">
+        <button class="btn primary" type="submit">Save</button>
+      </div>
+      <div class="field">
+        <button class="btn" type="reset">Reset</button>
+      </div>
+    </form>
+
+    <div class="sectionTitle">📦 Your Apps</div>
+    <div id="adminList" class="grid"></div>
+  </div>
+</section>
+
+<section id="about" class="panel" aria-labelledby="About">
+  <div class="sectionTitle">About This Site</div>
+  <p class="muted">ফ্রন্টএন্ড মাত্র (HTML/CSS/JS, localStorage)। প্রোডাকশনের জন্য
+    ফর্ম/CRUD অংশগুলোকে আপনার ব্যাকএন্ড API (Node/Python/PHP) দিয়ে রিপ্লেস করুন।</p>
+  <ul class="small">
+    <li>Security নোট: PIN/ডাটা ব্রাউজারেই থাকে — সংবেদনশীল কিছু রাখবেন না।</li>
+    <li>Export JSON দিয়ে ব্যাকআপ নিন, Import JSON দিয়ে দ্রুত রিস্টোর/মাইগ্রেট করুন।</li>
+  </ul>
+</section>
+
+  </main>  <footer>
+    <div class="wrap foot">
+      <div>© <span id="year"></span> Kishor Apps. All rights reserved.</div>
+      <div>Made with ❤️ — Single-file HTML Demo</div>
+    </div>
+  </footer>  <div class="modal" id="modal">
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="sectionTitle" id="mTitle">App Details</div>
+        <button class="btn" id="mClose">✕</button>
+      </div>
+      <div id="mBody" class="small"></div>
+    </div>
+  </div>  <script>
+    // ===== Utilities =====
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+    const storeKey = 'kishor_apps_v1';
+    const pinKey = 'kishor_admin_open';
+    const DEMO_PIN = '2580';
+
+    const nowYear = new Date().getFullYear();
+    $('#year').textContent = nowYear;
+
+    const sample = [
+      {id:crypto.randomUUID(), name:'Quiz Master', category:'Education', desc:'MCQ practice with timer', link:'#', tags:['quiz','study'], thumb:'QM', version:'1.2.0', date:'2025-08-01', long:'Practice unlimited MCQs with explanations.'},
+      {id:crypto.randomUUID(), name:'Runner X', category:'Game', desc:'Endless runner in canvas', link:'#', tags:['game','canvas'], thumb:'RX', version:'0.9.5', date:'2025-07-22', long:'Fast-paced endless runner built with JS.'},
+      {id:crypto.randomUUID(), name:'Tools Hub', category:'Utility', desc:'All-in-one tools kit', link:'#', tags:['tools','utility','qr'], thumb:'TH', version:'2.0.0', date:'2025-08-10', long:'Calculator, QR, converter, reminders — all-in-one.'}
+    ];
+
+    function load(){
+      const raw = localStorage.getItem(storeKey);
+      return raw ? JSON.parse(raw) : sample;
+    }
+    function save(data){ localStorage.setItem(storeKey, JSON.stringify(data)); }
+
+    function uniqueCats(data){
+      const s = new Set(data.map(x=>x.category));
+      return ['All', ...Array.from(s)].filter(Boolean);
+    }
+
+    function renderCats(){
+      const data = load();
+      const cats = uniqueCats(data);
+      const sel = $('#cat');
+      sel.innerHTML = cats.map(c=>`<option value="${c.toLowerCase()}">${c}</option>`).join('');
+    }
+
+    function card(a){
+      const t = a.thumb?.slice(0,3).toUpperCase() || 'APP';
+      return `<article class="card" data-id="${a.id}">
+        <div class="thumb">${t}</div>
+        <div class="content">
+          <div class="row">
+            <strong>${a.name}</strong>
+            <span class="small muted">v${a.version||'1.0'}</span>
+          </div>
+          <div class="small muted">${a.desc||''}</div>
+          <div class="tags">${(a.tags||[]).map(t=>`<span class="tag">#${t}</span>`).join('')}</div>
+          <div class="row">
+            <a class="btn" href="${a.link||'#'}" target="_blank">Download</a>
+            <button class="btn" data-view>Details</button>
+          </div>
+        </div>
+      </article>`
+    }
+
+    function renderGrid(){
+      const q = $('#q').value.trim().toLowerCase();
+      const cat = $('#cat').value;
+      const sortNew = $('#sortNew').checked;
+      let data = load();
+      if(cat && cat!=="all"){ data = data.filter(d=>d.category?.toLowerCase()===cat); }
+      if(q){ data = data.filter(d=> (d.name+" "+(d.desc||"")+" "+(d.tags||[]).join(' ')).toLowerCase().includes(q)); }
+      data.sort((a,b)=>{
+        const da = new Date(a.date||0).getTime();
+        const db = new Date(b.date||0).getTime();
+        return sortNew ? db - da : da - db;
+      });
+      $('#grid').innerHTML = data.map(card).join('');
+      // bind details
+      $$('#grid [data-view]').forEach(btn=>{
+        btn.onclick = (e)=>{
+          const id = e.target.closest('.card').dataset.id;
+          const app = load().find(x=>x.id===id);
+          openModal(app);
+        }
+      })
+    }
+
+    function openModal(app){
+      $('#mTitle').textContent = app.name;
+      $('#mBody').innerHTML = `
+        <div class="small">Category: <strong>${app.category}</strong> • Version: <strong>${app.version||''}</strong> • Release: <strong>${app.date||''}</strong></div>
+        <p style="margin-top:8px">${app.long || app.desc || ''}</p>
+        <div class="tags">${(app.tags||[]).map(t=>`<span class="tag">#${t}</span>`).join('')}</div>
+        <div style="margin-top:10px"><a class="btn primary" href="${app.link||'#'}" target="_blank">Open Link</a></div>`;
+      $('#modal').classList.add('open');
+    }
+    $('#mClose').onclick = ()=> $('#modal').classList.remove('open');
+    $('#modal').onclick = (e)=>{ if(e.target.id==='modal') $('#modal').classList.remove('open'); };
+
+    // ===== Admin =====
+    function adminOpen(){ return sessionStorage.getItem(pinKey)==='1'; }
+    function setAdmin(open){ open ? sessionStorage.setItem(pinKey,'1') : sessionStorage.removeItem(pinKey); }
+    function applyAdminUI(){ $('#adminArea').style.display = adminOpen() ? 'block' : 'none'; }
+
+    $('#btnUnlock').onclick = ()=>{
+      const val = $('#pin').value.trim();
+      if(val===DEMO_PIN){ setAdmin(true); $('#adminNotice').textContent='✅ Admin unlocked (demo).'; applyAdminUI(); }
+      else { $('#adminNotice').textContent='❌ Wrong PIN.'; }
+    };
+    $('#btnLock').onclick = ()=>{ setAdmin(false); $('#adminNotice').textContent='🔒 Locked.'; applyAdminUI(); };
+
+    // Add/Edit
+    let editId = null;
+    $('#appForm').onsubmit = (e)=>{
+      e.preventDefault();
+      if(!adminOpen()){ alert('Unlock admin first.'); return; }
+      const fd = new FormData(e.target);
+      const obj = Object.fromEntries(fd.entries());
+      obj.tags = (obj.tags||'').split(',').map(s=>s.trim()).filter(Boolean);
+      if(!obj.name || !obj.category){ return alert('Name & Category required'); }
+      let data = load();
+      if(editId){
+        const i = data.findIndex(x=>x.id===editId);
+        data[i] = {...data[i], ...obj};
+        editId = null;
+      } else {
+        data.push({ id:crypto.randomUUID(), ...obj });
+      }
+      save(data); renderCats(); renderGrid(); e.target.reset();
+      $('#adminNotice').textContent='💾 Saved.';
+    };
+
+    function adminCard(a){
+      return `<article class="card" data-id="${a.id}">
+        <div class="thumb">${(a.thumb||'APP').slice(0,3)}</div>
+        <div class="content">
+          <strong>${a.name}</strong>
+          <div class="small muted">${a.category} • v${a.version||''}</div>
+          <div class="row">
+            <button class="btn" data-edit>Edit</button>
+            <button class="btn danger" data-del>Delete</button>
+          </div>
+        </div>
+      </article>`
+    }
+    function renderAdminList(){
+      $('#adminList').innerHTML = load().map(adminCard).join('');
+      $$('#adminList [data-edit]').forEach(b=> b.onclick = (e)=>{
+        const id = e.target.closest('.card').dataset.id; const a = load().find(x=>x.id===id);
+        editId = id;
+        const f = $('#appForm');
+        f.name.value=a.name||''; f.category.value=a.category||''; f.desc.value=a.desc||''; f.link.value=a.link||'';
+        f.tags.value=(a.tags||[]).join(', '); f.thumb.value=a.thumb||''; f.version.value=a.version||''; f.date.value=a.date||''; f.long.value=a.long||'';
+        window.scrollTo({top:0,behavior:'smooth'});
+      });
+      $$('#adminList [data-del]').forEach(b=> b.onclick = (e)=>{
+        if(!confirm('Delete this app?')) return;
+        const id = e.target.closest('.card').dataset.id;
+        save(load().filter(x=>x.id!==id)); renderCats(); renderGrid(); renderAdminList();
+      });
+    }
+
+    // ===== Import / Export =====
+    $('#btnExport').onclick = ()=>{
+      const data = JSON.stringify(load(), null, 2);
+      const blob = new Blob([data], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'kishor-apps.json'; a.click();
+      URL.revokeObjectURL(url);
+    };
+    $('#btnImport').onclick = ()=>{
+      const i = document.createElement('input'); i.type='file'; i.accept='application/json';
+      i.onchange = ()=>{
+        const f = i.files[0]; const r = new FileReader();
+        r.onload = ()=>{ try{ const data = JSON.parse(r.result); save(data); renderCats(); renderGrid(); renderAdminList(); alert('Imported!'); }catch(e){ alert('Invalid JSON'); } };
+        r.readAsText(f);
+      };
+      i.click();
+    };
+
+    // ===== Tabs & UI =====
+    $$('.tab').forEach(t=> t.onclick = ()=>{
+      $$('.tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const name = t.dataset.tab;
+      $$('.panel').forEach(p=> p.classList.toggle('active', p.id===name));
+      if(name==='admin'){ renderAdminList(); }
+    });
+
+    $('#q').oninput = renderGrid; $('#cat').onchange = renderGrid; $('#sortNew').onchange = renderGrid;
+    $('#btnAddNew').onclick = ()=>{ $$('.tab')[1].click(); window.scrollTo({top:0,behavior:'smooth'}); };
+
+    // Theme toggle (simple)
+    let dark = true;
+    $('#btnToggleTheme').onclick = ()=>{
+      dark = !dark;
+      document.body.style.filter = dark ? 'none' : 'invert(1) hue-rotate(180deg)';
+    };
+    $('#btnAdmin').onclick = ()=> $$('.tab')[1].click();
+
+    // Init
+    renderCats(); renderGrid(); applyAdminUI()
